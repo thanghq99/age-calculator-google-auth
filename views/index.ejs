@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Age calculator</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <!-- load bootstrap css -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <!-- load fontawesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <style>
+        .bg-cover {
+            background-attachment: static;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: auto;
+        }
+
+        .jumbotron {
+            height: 100vh;
+        }
+    </style>
+
+    <script>
+        $(function () {
+            $("#datepicker").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                maxDate: "0D"
+            });
+            $("#datepicker").datepicker("option", "showAnim", 'blind');
+        });
+
+        function ageCal() {
+
+            //Get user's date of birthday
+            var date = $("#datepicker").datepicker('getDate'),
+                dobDate = date.getDate(),
+                dobMonth = date.getMonth() + 1,
+                dobYear = date.getFullYear()
+            //alert(dobDate + "-" + dobMonth + "-" + dobYear);
+
+            //Get curent date
+            var now = new Date();
+            var currentYear = now.getFullYear();
+            var currentMonth = now.getMonth() + 1;
+            var currentDate = now.getDate();
+
+            //alert(currentDate + " - " + currentMonth + " - " + currentYear);
+
+            //Declare age 
+            var age = {};
+            var ageString = "";
+
+            //Get years  
+            yearAge = currentYear - dobYear;
+
+            //Get months  
+            if (currentMonth >= dobMonth)
+                var monthAge = currentMonth - dobMonth;
+            else {
+                yearAge--;
+                var monthAge = 12 + currentMonth - dobMonth;
+            }
+
+            //Get days  
+            if (currentDate >= dobDate)
+                var dateAge = currentDate - dobDate;
+            else {
+                monthAge--;
+                var dateAge = 31 + currentDate - dobDate;
+
+                if (monthAge < 0) {
+                    monthAge = 11;
+                    yearAge--;
+                }
+            }
+            // alert("date: " + dateAge + ", moth: " + monthAge + " year: " + yearAge);
+            // alert("date: " + dateAge + ", moth: " + monthAge + " year: " + yearAge +
+            //     "date: " + dobAge + ", moth: " + dobMonth + " year: " + dobYear +
+            //     "date: " + currentDate + ", moth: " + currentMonth + " year: " + currentYear
+            // );
+            //Age  
+            age = {
+                years: yearAge,
+                months: monthAge,
+                days: dateAge
+            };
+
+            //Normal age
+            if ((age.years > 0) && (age.months > 0) && (age.days > 0))
+                ageString = "You're " + age.years + " years, " + age.months + " months, and " + age.days + " days old.";
+            //Birthday, same year, month and day
+            else if ((age.years > 0) && (age.months == 0) && (age.days == 0))
+                ageString = age.years + " years old. Happy Birthday!!";
+            //Same year and month
+            else if ((age.years == 0) && (age.months == 0) && (age.days > 0))
+                ageString = "Impressive! Only " + age.days + " days old! At this age, we only cried..";
+            //Same year and day
+            else if ((age.years == 0) && (age.months > 0) && (age.days == 0))
+                ageString = "You're " + age.months + " months old.";
+            //Same day
+            else if ((age.years > 0) && (age.months > 0) && (age.days == 0))
+                ageString = "You're " + age.years + " years and " + age.months + " months old.";
+            //Same year
+            else if ((age.years == 0) && (age.months > 0) && (age.days > 0))
+                ageString = "You're " + age.months + " months and " + age.days + " days old.";
+            //Same month
+            else if ((age.years > 0) && (age.months == 0) && (age.days > 0))
+                ageString = "You're " + age.years + " years, and " + age.days + " days old.";
+            else ageString = "Wow! Is that too soon to use computer? At my age, you would be the greatest hacker!";
+
+            //display the calculated age  
+            return document.getElementById("result").innerHTML = ageString;
+        };
+    </script>
+</head>
+
+<body class="jumbotron bg-cover text-white"
+    style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(https://images4.alphacoders.com/201/201716.jpg)">
+    <div>
+        <div class="container">
+            <div class="container mt-3 text-center">
+                <h1 class="display: 4;">How old am I?</h1>
+                <h3 class="lead;" style="font-size: x-large;">Login or Register with:</h3>
+                <a href="/login" class="btn btn-secondary" style="font-size: 12px; border-radius: 4px;"><span
+                        class="fa fa-user"></span> Local Login</a>
+                <a href="/signup" class="btn btn-secondary" style="font-size: 12px; border-radius: 4px;"><span
+                        class="fa fa-user"></span> Local Signup</a>
+                <a href="/auth/google" class="btn btn-danger" style="font-size: 12px; border-radius: 4px;"><span
+                        class="fa fa-google-plus"></span>Sign in
+                    with Google</a>
+                <p>Or use our service without an account.</p>
+                <p>But it would be great if you help us gather some information about the users. :)</p>
+                <p>Date of birth: <input type="text" id="datepicker" size="7"></p>
+                <button type="submit" class="btn btn-success"
+                    style="font-size: 120%; border-radius: 4px; margin-top: 5px;" onclick="ageCal()">Calculate</button>
+            </div>
+            <div class="container mt-3 text-center" style="padding-top: 5px;">
+                <h1 id="result" style="font-size: larger"></h1>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
